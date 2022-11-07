@@ -15,10 +15,16 @@ public class Animal {
         this.image =image;
     }
 
-    public int GetAge(){
+    public int GetAgeInt(){
         return Integer.parseInt(age);
     }
-    public float GetWeight(){
+    public float GetWeightInt(){
         return Float.parseFloat(weight);
     }
+
+    public String GetName(){return name;}
+    public String GetKind(){return kind;}
+    public String GetAge(){return age;}
+    public String GetWeight(){return weight;}
+    public Bitmap GetImage(){return image;}
 }

@@ -1,7 +1,5 @@
 package com.example.apiwork;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -16,6 +14,8 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
                         Collections.sort(animalList, new Comparator<Animal>() {
                             @Override
                             public int compare(Animal o1, Animal o2) {
-                                return o1.GetAge()-o2.GetAge();
+                                return o1.GetAgeInt()-o2.GetAgeInt();
                             }
                         });
                         adapter = new AnimalAdapter(MainActivity.this, (ArrayList<Animal>) animalList);
@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
                         Collections.sort(animalList, new Comparator<Animal>() {
                             @Override
                             public int compare(Animal o1, Animal o2) {
-                                return Float.compare(o1.GetWeight(), o2.GetWeight());
+                                return Float.compare(o1.GetWeightInt(), o2.GetWeightInt());
                             }
                         });
                         adapter = new AnimalAdapter(MainActivity.this, (ArrayList<Animal>) animalList);
@@ -183,7 +183,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(Void... voids) {
             try {
-                URL url = new URL("https://ngknn.ru:5101/NGKNN/ермолаевас/api/animals");//Строка подключения к нашей API
+                URL url = new URL("https://ngknn.ru:5001/NGKNN/ермолаевас/api/animals");//Строка подключения к нашей API
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection(); //вызываем нашу API
 
                 BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
