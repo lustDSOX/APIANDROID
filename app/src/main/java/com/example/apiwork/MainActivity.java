@@ -131,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
                 item_activity.putExtra("weight",item.weight);
                 item_activity.putExtra("id",item.id);
                 if(item.image != null) {
-                    item_activity.putExtra("image",encodeImage(item.image));
+                    //item_activity.putExtra("image",encodeImage(item.image));
                 }
                 startActivity(item_activity);
             }
@@ -220,7 +220,7 @@ public class MainActivity extends AppCompatActivity {
                             productJson.getString("Age"),
                             productJson.getString("Weight"),
                             productJson.getString("Id"),
-                            getImageBitmap( productJson.getString("Image"))
+                            productJson.getString("Image")
                     );
                     animalList.add(tempProduct);
                     pAdapter.notifyDataSetInvalidated();
@@ -245,5 +245,12 @@ public class MainActivity extends AppCompatActivity {
             startActivity(add_activity);
         }
 
+    }
+    public void AddAnimal(View v){
+        startActivity(add_activity);
+    }
+    public void UpdateList(View v){
+        animalList.clear();
+        new GetProducts().execute();
     }
 }

@@ -5,7 +5,7 @@ import retrofit2.http.Body;
 import retrofit2.http.POST;
 
 public interface RetrofitAPI {
-    @POST("animal")
+    @POST("animals")
 
         //on below line we are creating a method to post our data.
     Call<Animal> createPost(@Body Animal dataModal);

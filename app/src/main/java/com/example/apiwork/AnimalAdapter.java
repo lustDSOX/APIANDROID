@@ -57,7 +57,7 @@ public class AnimalAdapter extends BaseAdapter {
         ((TextView) view.findViewById(R.id.kind)).setText(animal.kind +" (" +animal.weight+")");
         ((TextView) view.findViewById(R.id.age)).setText(animal.age + " age");
         if(animal.image != null){
-            ((ImageView) view.findViewById(R.id.image)).setImageBitmap(animal.image);
+           // ((ImageView) view.findViewById(R.id.image)).setImageBitmap(animal.image);
         }
         else {
             ((ImageView) view.findViewById(R.id.image)).setImageResource(R.drawable.icon);

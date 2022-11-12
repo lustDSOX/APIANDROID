@@ -1,17 +1,22 @@
 package com.example.apiwork;
 
 
+
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
-import android.widget.ImageButton;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -21,16 +26,16 @@ import com.google.android.material.textfield.TextInputLayout;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.Base64;
-import java.util.Objects;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class AddActivity extends AppCompatActivity {
 
-    Connection connect;
     TextInputLayout name;
     TextInputLayout kind;
     TextInputLayout age;
@@ -84,28 +89,42 @@ public class AddActivity extends AppCompatActivity {
         return "";
     }
 
-    public void AddAnimal(View view){
-       /* try{
-            SQLConnection connection = new SQLConnection();
-            connect = connection.connect();
-            String qu = "insert into animal values("
-                    + Float.parseFloat(String.valueOf(weight.getEditText().getText()))
-                    + ",\'" + Objects.requireNonNull(name.getEditText()).getText()
-                    + "\',\'" + Objects.requireNonNull(kind.getEditText()).getText()+
-                    "\'," + Integer.parseInt(String.valueOf(age.getEditText().getText()))+
-                    ",\'" +encodedImage +
-                    "\')";
-            Statement statement = connect.createStatement();
-            ResultSet resultSet = statement.executeQuery(qu);
-            connect.close();
-            ((MainActivity)getBaseContext()).GetAnimalList();
-            this.finish();
-            Log.d("", String.valueOf((resultSet.last())));
-        }
-        catch (SQLException throwables) {
-            throwables.printStackTrace();
-            Log.d("Error - ",throwables.getMessage());
-        }*/
+    private void postData(String name,String kind,String age,String weight, String id,String image) {
+        // on below line we are creating a retrofit
+        // builder and passing our base url
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://reqres.in/api/")
+                // as we are sending data in json format so
+                // we have to add Gson converter factory
+                .addConverterFactory(GsonConverterFactory.create())
+                // at last we are building our retrofit builder.
+                .build();
+        // below line is to create an instance for our retrofit api class.
+        RetrofitAPI retrofitAPI = retrofit.create(RetrofitAPI.class);
+
+        // passing data from our text fields to our modal class.
+        Animal modal = new Animal(name,kind,age,weight,id,image);
+
+        // calling a method to create a post and passing our modal class.
+        Call<Animal> call = retrofitAPI.createPost(modal);
+
+        // on below line we are executing our method.
+        call.enqueue(new Callback<Animal>() {
+            @Override
+            public void onResponse(Call<Animal> call, Response<Animal> response) {
+                // this method is called when we get response from our api.
+                Toast.makeText(AddActivity.this, "Data added to API", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Call<Animal> call, Throwable t) {
+
+            }
+        });}
+    public void AddAnimal(View v){
+        BitmapDrawable bitmapDrawable = (BitmapDrawable) image.getDrawable();
+        Bitmap bitmap = bitmapDrawable.getBitmap();
+        //postData(name.text,kind.getEditText().getText(),age.getEditText().getText(),weight.getEditText().getText(),"0",encodeImage(bitmap));
     }
 
     public void BackBtn(View v1){
