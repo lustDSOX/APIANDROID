@@ -93,13 +93,13 @@
         android:layout_width="150dp"
         android:layout_height="50dp"
         android:layout_marginEnd="30dp"
+        android:background="@drawable/button"
         android:onClick="AddAnimal"
         android:text="Add"
+        android:textColor="#f2f2f2"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_weight"
-        android:background="@drawable/button"
-        android:textColor="#f2f2f2"/>
+        app:layout_constraintTop_toBottomOf="@+id/text_weight" />
 
     <Button
         android:layout_width="150dp"

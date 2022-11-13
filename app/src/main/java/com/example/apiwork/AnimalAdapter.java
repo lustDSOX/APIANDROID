@@ -1,7 +1,6 @@
 package com.example.apiwork;
 
 import android.annotation.SuppressLint;
-import android.app.Application;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -12,16 +11,16 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.Base64;
+import java.util.List;
 
 public class AnimalAdapter extends BaseAdapter {
 
     Context ctx;
     LayoutInflater lInflater;
-    ArrayList<Animal> animals;
+    List<Animal> animals;
 
-    AnimalAdapter(Context context, ArrayList<Animal> animals) {
+    AnimalAdapter(Context context, List<Animal> animals) {
         ctx = context;
         this.animals = animals;
         lInflater = (LayoutInflater) ctx
@@ -53,11 +52,11 @@ public class AnimalAdapter extends BaseAdapter {
 
         Animal animal = getAnimal(i);
 
-        ((TextView) view.findViewById(R.id.animal_name)).setText(animal.name );
-        ((TextView) view.findViewById(R.id.kind)).setText(animal.kind +" (" +animal.weight+")");
-        ((TextView) view.findViewById(R.id.age)).setText(animal.age + " age");
-        if(animal.image != null){
-           // ((ImageView) view.findViewById(R.id.image)).setImageBitmap(animal.image);
+        ((TextView) view.findViewById(R.id.animal_name)).setText(animal.Name );
+        ((TextView) view.findViewById(R.id.kind)).setText(animal.Kind +" (" +animal.Weight+")");
+        ((TextView) view.findViewById(R.id.age)).setText(animal.Age + " age");
+        if(animal.Image != "null"){
+            ((ImageView) view.findViewById(R.id.image)).setImageBitmap(getImageBitmap(animal.Image));
         }
         else {
             ((ImageView) view.findViewById(R.id.image)).setImageResource(R.drawable.icon);
@@ -68,6 +67,12 @@ public class AnimalAdapter extends BaseAdapter {
         return ((Animal) getItem(position));
     }
 
-
+    private Bitmap getImageBitmap(String encodedImg) {
+            byte[] bytes = new byte[0];
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                bytes = Base64.getDecoder().decode(encodedImg);
+            }
+            return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+    }
 
 }

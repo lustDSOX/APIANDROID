@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -13,10 +14,12 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -32,14 +35,19 @@ import java.sql.Statement;
 import java.util.Base64;
 import java.util.Objects;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
 public class ItemActivity extends AppCompatActivity {
 
     TextInputLayout name;
     TextInputLayout kind;
     TextInputLayout age;
     TextInputLayout weight;
-    Integer id;
-    Connection connect;
+    int id;
     ImageView image;
     String encodedImage;
 
@@ -59,7 +67,7 @@ public class ItemActivity extends AppCompatActivity {
         catch (Exception e){
             _image = "";
         }
-        id = Integer.valueOf(arguments.get("id").toString());
+        id = Integer.parseInt(arguments.get("id").toString());
 
         Log.e("id - ", String.valueOf(id));
         name = findViewById(R.id.text_name);
@@ -131,26 +139,33 @@ public class ItemActivity extends AppCompatActivity {
     public void BackBtn(View v){this.finish();}
 
     public void UpdateData(View v){
-       /* try{
-            SQLConnection connection = new SQLConnection();
-            connect = connection.connect();
-            String qu = "update animal set weight_animal = "
-                    + Float.parseFloat(String.valueOf(weight.getEditText().getText()))
-                    + ",nickname_animal =\'" + Objects.requireNonNull(name.getEditText()).getText()
-                    + "\', kind =\'" + Objects.requireNonNull(kind.getEditText()).getText()+
-                    "\', age =" + Integer.parseInt(String.valueOf(age.getEditText().getText()))+
-                    ", image = \'" + encodedImage+
-                    "\' where id_animal = " + id;
-            Statement statement = connect.createStatement();
-            statement.executeQuery(qu);
-            connect.close();
-            ((MainActivity)getBaseContext()).GetAnimalList();
-        }
-        catch (SQLException throwables) {
-            throwables.printStackTrace();
-            Log.d("Error - ",throwables.getMessage());
-            ((MainActivity)getBaseContext()).GetAnimalList();
-        }*/
+        BitmapDrawable bitmapDrawable = (BitmapDrawable) image.getDrawable();
+        Bitmap bitmap = bitmapDrawable.getBitmap();
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://ngknn.ru:5001/NGKNN/ермолаевас/api/animals/")
+                .addConverterFactory(GsonConverterFactory.create()).build();
+        RetrofitAPI retrofitAPI = retrofit.create(RetrofitAPI.class);
+
+        Animal modal = new Animal(String.valueOf(name.getEditText().getText()),
+                String.valueOf(kind.getEditText().getText()),
+                String.valueOf(age.getEditText().getText()),
+                String.valueOf(weight.getEditText().getText()),
+                id,encodeImage(bitmap));
+
+        Call<Animal> call = retrofitAPI.updateData(id, modal);
+
+        call.enqueue(new Callback<Animal>() {
+            @Override
+            public void onResponse(@NonNull Call<Animal> call, @NonNull Response<Animal> response) {
+                Toast.makeText(ItemActivity.this, "Data updated to API", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<Animal> call, @NonNull Throwable t) {
+                Toast.makeText(ItemActivity.this, t.getMessage(),
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     public void Alert(View v){
@@ -164,22 +179,24 @@ public class ItemActivity extends AppCompatActivity {
                 .show();
     }
     public DialogInterface.OnClickListener DeleteData(){
-        /*try{
-            SQLConnection connection = new SQLConnection();
-            connect = connection.connect();
-            String qu = "delete from animal where id_animal = " + id;
-            Statement statement = connect.createStatement();
-            statement.executeQuery(qu);
-            connect.close();
-            ((MainActivity)getBaseContext()).GetAnimalList();
-            this.finish();
-        }
-        catch (SQLException throwables) {
-            throwables.printStackTrace();
-            Log.d("Error - ",throwables.getMessage());
-            ((MainActivity)getBaseContext()).GetAnimalList();
-            this.finish();
-        }*/
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://ngknn.ru:5001/NGKNN/ермолаевас/api/animals/")
+                .addConverterFactory(GsonConverterFactory.create()).build();
+        RetrofitAPI retrofitAPI = retrofit.create(RetrofitAPI.class);
+        Call<Animal> call = retrofitAPI.deleteData(id);
+
+        call.enqueue(new Callback<Animal>() {
+            @Override
+            public void onResponse(@NonNull Call<Animal> call, @NonNull Response<Animal> response) {
+                Toast.makeText(ItemActivity.this, "Data updated to API", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<Animal> call, @NonNull Throwable t) {
+                Toast.makeText(ItemActivity.this, t.getMessage(),
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
         return null;
     }
 }

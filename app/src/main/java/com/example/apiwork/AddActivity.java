@@ -89,11 +89,11 @@ public class AddActivity extends AppCompatActivity {
         return "";
     }
 
-    private void postData(String name,String kind,String age,String weight, String id,String image) {
+    private void postData(String name,String kind,String age,String weight,String image) {
         // on below line we are creating a retrofit
         // builder and passing our base url
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://reqres.in/api/")
+                .baseUrl("https://ngknn.ru:5001/NGKNN/ермолаевас/api/animals/")
                 // as we are sending data in json format so
                 // we have to add Gson converter factory
                 .addConverterFactory(GsonConverterFactory.create())
@@ -103,7 +103,7 @@ public class AddActivity extends AppCompatActivity {
         RetrofitAPI retrofitAPI = retrofit.create(RetrofitAPI.class);
 
         // passing data from our text fields to our modal class.
-        Animal modal = new Animal(name,kind,age,weight,id,image);
+        Animal modal = new Animal(name,kind,age,weight,0,image);
 
         // calling a method to create a post and passing our modal class.
         Call<Animal> call = retrofitAPI.createPost(modal);
@@ -124,7 +124,8 @@ public class AddActivity extends AppCompatActivity {
     public void AddAnimal(View v){
         BitmapDrawable bitmapDrawable = (BitmapDrawable) image.getDrawable();
         Bitmap bitmap = bitmapDrawable.getBitmap();
-        //postData(name.text,kind.getEditText().getText(),age.getEditText().getText(),weight.getEditText().getText(),"0",encodeImage(bitmap));
+        postData(String.valueOf(name.getEditText().getText()),String.valueOf(kind.getEditText().getText()),String.valueOf(age.getEditText().getText())
+                ,String.valueOf(weight.getEditText().getText()),encodeImage(bitmap));
     }
 
     public void BackBtn(View v1){

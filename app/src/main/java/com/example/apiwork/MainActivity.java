@@ -1,10 +1,7 @@
 package com.example.apiwork;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -21,27 +18,24 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    private AnimalAdapter pAdapter;
+    private AnimalAdapter adapter;
     private List<Animal> animalList = new ArrayList<>();
 
     ListView item_list;
     Intent add_activity;
     Intent item_activity;
     EditText txt_search;
-    AnimalAdapter adapter;
     Spinner spinner;
-    ArrayList<Animal> animalList_s;
+    List<Animal> animalList_s;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,8 +45,8 @@ public class MainActivity extends AppCompatActivity {
         со списком (ListView)
         */
         ListView ivProducts = findViewById(R.id.item_list);//Находим лист в который будем класть наши объекты
-        pAdapter = new AnimalAdapter(MainActivity.this, (ArrayList<Animal>) animalList); //Создаем объект нашего адаптера
-        ivProducts.setAdapter(pAdapter); //Cвязывает подготовленный список с адаптером
+        adapter = new AnimalAdapter(MainActivity.this, (ArrayList<Animal>) animalList); //Создаем объект нашего адаптера
+        ivProducts.setAdapter(adapter); //Cвязывает подготовленный список с адаптером
 
         new GetProducts().execute(); //Подключение к нашей API в отдельном потоке
 
@@ -96,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
                         Collections.sort(animalList, new Comparator<Animal>() {
                             @Override
                             public int compare(Animal o1, Animal o2) {
-                                return o1.name.compareTo(o2.name);
+                                return o1.Name.compareTo(o2.Name);
                             }
                         });
                         adapter = new AnimalAdapter(MainActivity.this, (ArrayList<Animal>) animalList);
@@ -106,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
                         Collections.sort(animalList, new Comparator<Animal>() {
                             @Override
                             public int compare(Animal o1, Animal o2) {
-                                return o1.kind.compareTo(o2.kind);
+                                return o1.Kind.compareTo(o2.Kind);
                             }
                         });
                         adapter = new AnimalAdapter(MainActivity.this, (ArrayList<Animal>) animalList);
@@ -125,13 +119,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Animal item = (Animal) item_list.getItemAtPosition(i);
-                item_activity.putExtra("name",item.name);
-                item_activity.putExtra("kind",item.kind);
-                item_activity.putExtra("age",item.age);
-                item_activity.putExtra("weight",item.weight);
-                item_activity.putExtra("id",item.id);
-                if(item.image != null) {
-                    //item_activity.putExtra("image",encodeImage(item.image));
+                item_activity.putExtra("name",item.Name);
+                item_activity.putExtra("kind",item.Kind);
+                item_activity.putExtra("age",item.Age);
+                item_activity.putExtra("weight",item.Weight);
+                item_activity.putExtra("id",item.Id);
+                if(item.Image != null) {
+                    item_activity.putExtra("image",item.Image);
                 }
                 startActivity(item_activity);
             }
@@ -145,8 +139,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int i, int i1, int i2) {
-                if(s.toString().equals("")){
-                    // reset listview
+               /* if(s.toString().equals("")){
                     adapter = new AnimalAdapter(MainActivity.this,animalList_s);
                     item_list.setAdapter(adapter);
                 } else {
@@ -156,7 +149,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                     adapter.notifyDataSetChanged();
-                }
+                }*/
             }
 
             @Override
@@ -165,18 +158,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-    }
-    private String encodeImage(Bitmap bitmap) {
-        int prevW = 150;
-        int prevH = bitmap.getHeight() * prevW / bitmap.getWidth();
-        Bitmap b = Bitmap.createScaledBitmap(bitmap, prevW, prevH, false);
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        b.compress(Bitmap.CompressFormat.JPEG, 50, byteArrayOutputStream);
-        byte[] bytes = byteArrayOutputStream.toByteArray();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            return Base64.getEncoder().encodeToString(bytes);
-        }
-        return "";
     }
     private class GetProducts extends AsyncTask<Void, Void, String> {
 
@@ -219,32 +200,17 @@ public class MainActivity extends AppCompatActivity {
                             productJson.getString("Kind"),
                             productJson.getString("Age"),
                             productJson.getString("Weight"),
-                            productJson.getString("Id"),
+                            productJson.getInt("Id"),
                             productJson.getString("Image")
                     );
                     animalList.add(tempProduct);
-                    pAdapter.notifyDataSetInvalidated();
+                    adapter.notifyDataSetInvalidated();
                 }
             } catch (Exception ignored) {
 
 
             }
         }
-        private Bitmap getImageBitmap(String encodedImg) {
-            if (encodedImg != null) {
-                byte[] bytes = new byte[0];
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                    bytes = Base64.getDecoder().decode(encodedImg);
-                }
-                return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-            }
-            return BitmapFactory.decodeResource(getResources(),
-                    R.drawable.icon);
-        }
-        public void AddAnimal(View v){
-            startActivity(add_activity);
-        }
-
     }
     public void AddAnimal(View v){
         startActivity(add_activity);
