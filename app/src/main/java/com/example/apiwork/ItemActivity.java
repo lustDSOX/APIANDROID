@@ -136,7 +136,10 @@ public class ItemActivity extends AppCompatActivity {
                 R.drawable.icon);
     }
 
-    public void BackBtn(View v){this.finish();}
+    public void BackBtn(View v){
+        ((MainActivity)getBaseContext()).UpdateList();
+        this.finish();
+    }
 
     public void UpdateData(View v){
         BitmapDrawable bitmapDrawable = (BitmapDrawable) image.getDrawable();

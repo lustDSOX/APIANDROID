@@ -196,16 +196,13 @@ public class MainActivity extends AppCompatActivity {
                     animalList.add(tempProduct);
                     adapter.notifyDataSetInvalidated();
                 }
-            } catch (Exception ignored) {
-
-
-            }
+            } catch (Exception ignored) {}
         }
     }
     public void AddAnimal(View v){
         startActivity(add_activity);
     }
-    public void UpdateList(View v){
+    public void UpdateList(){
         animalList.clear();
         new GetProducts().execute();
     }

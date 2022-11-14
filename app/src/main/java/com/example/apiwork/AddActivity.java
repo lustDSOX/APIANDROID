@@ -1,7 +1,6 @@
 package com.example.apiwork;
 
 
-
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -76,6 +75,7 @@ public class AddActivity extends AppCompatActivity {
             }
         }
     });
+
     private String encodeImage(Bitmap bitmap) {
         int prevW = 150;
         int prevH = bitmap.getHeight() * prevW / bitmap.getWidth();
@@ -89,7 +89,7 @@ public class AddActivity extends AppCompatActivity {
         return "";
     }
 
-    private void postData(String name,String kind,String age,String weight,String image) {
+    private void postData(String name, String kind, String age, String weight, String image) {
         // on below line we are creating a retrofit
         // builder and passing our base url
         Retrofit retrofit = new Retrofit.Builder()
@@ -103,7 +103,7 @@ public class AddActivity extends AppCompatActivity {
         RetrofitAPI retrofitAPI = retrofit.create(RetrofitAPI.class);
 
         // passing data from our text fields to our modal class.
-        Animal modal = new Animal(name,kind,age,weight,0,image);
+        Animal modal = new Animal(name, kind, age, weight, 0, image);
 
         // calling a method to create a post and passing our modal class.
         Call<Animal> call = retrofitAPI.createPost(modal);
@@ -120,15 +120,18 @@ public class AddActivity extends AppCompatActivity {
             public void onFailure(Call<Animal> call, Throwable t) {
 
             }
-        });}
-    public void AddAnimal(View v){
-        BitmapDrawable bitmapDrawable = (BitmapDrawable) image.getDrawable();
-        Bitmap bitmap = bitmapDrawable.getBitmap();
-        postData(String.valueOf(name.getEditText().getText()),String.valueOf(kind.getEditText().getText()),String.valueOf(age.getEditText().getText())
-                ,String.valueOf(weight.getEditText().getText()),encodeImage(bitmap));
+        });
     }
 
-    public void BackBtn(View v1){
+    public void AddAnimal(View v) {
+        BitmapDrawable bitmapDrawable = (BitmapDrawable) image.getDrawable();
+        Bitmap bitmap = bitmapDrawable.getBitmap();
+        postData(String.valueOf(name.getEditText().getText()), String.valueOf(kind.getEditText().getText()), String.valueOf(age.getEditText().getText())
+                , String.valueOf(weight.getEditText().getText()), encodeImage(bitmap));
+    }
+
+    public void BackBtn(View v1) {
+        ((MainActivity) getBaseContext()).UpdateList();
         this.finish();
     }
 }
