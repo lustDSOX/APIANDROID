@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
                         Collections.sort(animalList, new Comparator<Animal>() {
                             @Override
                             public int compare(Animal o1, Animal o2) {
-                                return o1.Name.compareTo(o2.Name);
+                                return o1.nickname_animal.compareTo(o2.nickname_animal);
                             }
                         });
                         adapter = new AnimalAdapter(MainActivity.this, (ArrayList<Animal>) animalList);
@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
                         Collections.sort(animalList, new Comparator<Animal>() {
                             @Override
                             public int compare(Animal o1, Animal o2) {
-                                return o1.Kind.compareTo(o2.Kind);
+                                return o1.kind.compareTo(o2.kind);
                             }
                         });
                         adapter = new AnimalAdapter(MainActivity.this, (ArrayList<Animal>) animalList);
@@ -119,13 +119,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Animal item = (Animal) item_list.getItemAtPosition(i);
-                item_activity.putExtra("name",item.Name);
-                item_activity.putExtra("kind",item.Kind);
-                item_activity.putExtra("age",item.Age);
-                item_activity.putExtra("weight",item.Weight);
-                item_activity.putExtra("id",item.Id);
-                if(item.Image != null) {
-                    item_activity.putExtra("image",item.Image);
+                item_activity.putExtra("name",item.nickname_animal);
+                item_activity.putExtra("kind",item.kind);
+                item_activity.putExtra("age",item.age);
+                item_activity.putExtra("weight",item.weight_animal);
+                item_activity.putExtra("id",item.id_animal);
+                if(item.image != null) {
+                    item_activity.putExtra("image",item.image);
                 }
                 startActivity(item_activity);
             }
@@ -139,17 +139,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int i, int i1, int i2) {
-               /* if(s.toString().equals("")){
-                    adapter = new AnimalAdapter(MainActivity.this,animalList_s);
-                    item_list.setAdapter(adapter);
-                } else {
-                    for(Animal item:animalList_s){
-                        if(!item.name.contains(s.toString())){
-                            animalList.remove(item);
-                        }
-                    }
-                    adapter.notifyDataSetChanged();
-                }*/
+                adapter.getFilter().filter(s.toString());
             }
 
             @Override

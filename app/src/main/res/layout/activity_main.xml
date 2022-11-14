@@ -60,24 +60,9 @@
         app:layout_constraintTop_toBottomOf="@+id/txtsearch"
         tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
-    <Button
-        android:id="@+id/button3"
-        android:layout_width="100dp"
-        android:layout_height="30dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="5dp"
-        android:background="@drawable/button"
-        android:text="CLEAR"
-        android:textColor="#f2f2f2"
-        app:layout_constraintBottom_toTopOf="@+id/item_list"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtsearch"
-        tools:ignore="HardcodedText,MissingConstraints,TouchTargetSizeCheck" />
-
     <EditText
         android:id="@+id/txtsearch"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="10dp"
         android:layout_marginTop="30dp"

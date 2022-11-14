@@ -5,25 +5,25 @@ import android.os.Parcelable;
 
 
 public class Animal implements Parcelable {
-    int Id;
-    String Name,Kind,Age,Weight,Image;
+    int id_animal;
+    String nickname_animal,kind,age,weight_animal,image;
 
-    public Animal(String Name,String Kind,String Age,String Weight, int Id,String Image){
-        this.Name = Name;
-        this.Kind = Kind;
-        this.Age = Age;
-        this.Weight = Weight;
-        this.Id = Id;
-        this.Image = Image;
+    public Animal(String nickname_animal,String kind,String age,String weight_animal, int id_animal,String image){
+        this.nickname_animal = nickname_animal;
+        this.kind = kind;
+        this.age = age;
+        this.weight_animal = weight_animal;
+        this.id_animal = id_animal;
+        this.image = image;
     }
 
     protected Animal(Parcel in) {
-        Id = in.readInt();
-        Weight = in.readString();
-        Name = in.readString();
-        Kind = in.readString();
-        Age = in.readString();
-        Image = in.readString();
+        id_animal = in.readInt();
+        weight_animal = in.readString();
+        nickname_animal = in.readString();
+        kind = in.readString();
+        age = in.readString();
+        image = in.readString();
     }
 
     public static final Parcelable.Creator<Animal> CREATOR = new Parcelable.Creator<Animal>() {
@@ -45,31 +45,31 @@ public class Animal implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(Id);
-        dest.writeString(Weight);
-        dest.writeString(Name);
-        dest.writeString(Kind);
-        dest.writeString(Age);
-        dest.writeString(Image);
+        dest.writeInt(id_animal);
+        dest.writeString(weight_animal);
+        dest.writeString(nickname_animal);
+        dest.writeString(kind);
+        dest.writeString(age);
+        dest.writeString(image);
     }
     public int GetAgeInt(){
-        return Integer.parseInt(Age);
+        return Integer.parseInt(age);
     }
     public float GetWeightInt(){
-        return Float.parseFloat(Weight);
+        return Float.parseFloat(weight_animal);
     }
 
-    public String GetName(){return Name;}
-    public String GetKind(){return Kind;}
-    public String GetAge(){return Age;}
-    public String GetWeight(){return Weight;}
-    public String GetImage(){return Image;}
-    public int Getid_animal(){return Id;}
+    public String GetName(){return nickname_animal;}
+    public String GetKind(){return kind;}
+    public String GetAge(){return age;}
+    public String GetWeight(){return weight_animal;}
+    public String GetImage(){return image;}
+    public int Getid_animal(){return id_animal;}
 
-    public void setImage(String imag) {Image = imag;}
-    public void setName(String Image) {Name = Image;}
-    public void setKind(String Image) {Kind = Image;}
-    public void setAge(String Image) {Age = Image;}
-    public void setWeight(String Image) {Weight = Image;}
-    public void setid_animal(int Image) {Id = Image;}
+    public void setImage(String imag) {image = imag;}
+    public void setName(String image) {nickname_animal = image;}
+    public void setKind(String image) {kind = image;}
+    public void setAge(String image) {age = image;}
+    public void setWeight(String image) {weight_animal = image;}
+    public void setid_animal(int image) {id_animal = image;}
 }
